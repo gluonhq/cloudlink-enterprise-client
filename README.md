@@ -26,8 +26,8 @@ which is the reference implementation for JSON-B.
     <dependencies>
         <dependency>
             <groupId>com.gluonhq</groupId>
-            <artifactId>cloudlink-client-enterprise-javaee</artifactId>
-            <version>1.1.0</version>
+            <artifactId>cloudlink-enterprise-client-javaee</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
@@ -50,7 +50,7 @@ which is the reference implementation for JSON-B.
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-client-enterprise-javaee:1.1.0'
+        compile 'com.gluonhq:cloudlink-enterprise-client-javaee:1.0.0'
     }
 
     // only required if running with Java EE 7
@@ -85,15 +85,15 @@ which is the reference implementation for JSON-B.
     <dependencies>
         <dependency>
             <groupId>com.gluonhq</groupId>
-            <artifactId>cloudlink-client-enterprise-spring</artifactId>
-            <version>1.1.0</version>
+            <artifactId>cloudlink-enterprise-client-spring</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-client-enterprise-spring:1.1.0'
+        compile 'com.gluonhq:cloudlink-enterprise-client-spring:1.0.0'
     }
 
 ### Instantiation ###
