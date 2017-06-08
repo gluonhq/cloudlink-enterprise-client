@@ -28,6 +28,7 @@ subprojects {
     }
 
     archivesBaseName = "${rootProject.name}-${project.name}"
+    version = rootProject.version
 
     javadoc {
         exclude('com/gluonhq/impl/**/*')
