@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
+    }
+}
+
+apply plugin: 'java'
+
+group = 'com.gluonhq'
+version = '1.0.0-SNAPSHOT'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply from: rootProject.file('mavenPublish.gradle')
+    apply from: rootProject.file('gradle/code-quality.gradle')
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        jcenter()
+    }
+
+    archivesBaseName = "${rootProject.name}-${project.name}"
+
+    javadoc {
+        exclude('com/gluonhq/impl/**/*')
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        from javadoc.destinationDir
+        classifier = 'javadoc'
+    }
+
+    artifacts {
+        archives sourcesJar, javadocJar
+    }
+}
+
+javadoc {
+    source subprojects.collect {
+        it.javadoc.source
+    }
+    classpath = files(subprojects.collect {
+        it.sourceSets.main.compileClasspath
+    })
+    title "Gluon CloudLink Enterprise Client ${version} API"
+}
