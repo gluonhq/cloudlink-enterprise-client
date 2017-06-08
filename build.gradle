@@ -27,8 +27,10 @@ subprojects {
         jcenter()
     }
 
-    archivesBaseName = "${rootProject.name}-${project.name}"
+    group = rootProject.group
     version = rootProject.version
+
+    archivesBaseName = "${rootProject.name}-${project.name}"
 
     javadoc {
         exclude('com/gluonhq/impl/**/*')
