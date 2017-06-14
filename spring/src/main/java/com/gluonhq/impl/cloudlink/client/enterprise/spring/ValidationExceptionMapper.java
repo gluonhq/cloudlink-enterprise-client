@@ -31,28 +31,33 @@
  */
 package com.gluonhq.impl.cloudlink.client.enterprise.spring;
 
-import com.gluonhq.cloudlink.client.enterprise.CloudLinkClient;
-import com.gluonhq.cloudlink.client.enterprise.CloudLinkConfig;
-import com.gluonhq.cloudlink.client.enterprise.spring.SpringCloudLinkClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Configuration
-@ComponentScan("com.gluonhq.impl.cloudlink.client.enterprise.spring")
-@ConditionalOnMissingBean(CloudLinkClient.class)
-public class CloudLinkConfiguration {
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
-    @Value("${gluon.cloudlink.endpoint:https://cloud.gluonhq.com}")
-    private String endpoint;
+@ControllerAdvice
+public class ValidationExceptionMapper {
 
-    @Value("${gluon.cloudlink.serverKey}")
-    private String serverKey;
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ResponseBody
+    public String handle(ConstraintViolationException exception) {
+        StringBuilder messageBuilder = new StringBuilder("Bean Validation failed:");
+        int i = 1;
+        for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
+            messageBuilder.append("\n\t").append(i++).append(". ")
+                    .append("\tClass: ").append(violation.getRootBeanClass().getName());
+            if (violation.getPropertyPath() != null && !violation.getPropertyPath().toString().isEmpty()) {
+                messageBuilder.append("\n\t\tProperty: ").append(violation.getPropertyPath());
+            }
+            messageBuilder.append("\n\t\tMessage: " ).append(violation.getMessage());
+        }
 
-    @Bean
-    public CloudLinkClient cloudLinkClient() {
-        return new SpringCloudLinkClient(new CloudLinkConfig(endpoint, serverKey));
+        return messageBuilder.toString();
     }
 }

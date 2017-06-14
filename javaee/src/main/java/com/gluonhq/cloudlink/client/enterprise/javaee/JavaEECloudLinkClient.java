@@ -41,13 +41,16 @@ import com.gluonhq.impl.cloudlink.client.enterprise.javaee.GluonAuthenticationFe
 import com.gluonhq.impl.cloudlink.client.enterprise.javaee.StringObject;
 
 import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.InvocationContext;
 import javax.json.Json;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -57,7 +60,6 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -78,7 +80,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
     /**
      * Used for injection.
      */
-    private JavaEECloudLinkClient() {
+    JavaEECloudLinkClient() {
     }
 
     /**
@@ -127,16 +129,17 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
         return builder.build().target(cloudLinkUrl);
     }
 
+    @AroundInvoke
+    private Object aroundInvoke(InvocationContext invocationContext) throws Exception {
+        validator.forExecutables().validateParameters(this, invocationContext.getMethod(), invocationContext.getParameters());
+        return invocationContext.proceed();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public PushNotification sendPushNotification(PushNotification notification) {
-        Set<ConstraintViolation<PushNotification>> violations = validator.validate(notification);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
-        }
-
+    public PushNotification sendPushNotification(@Valid @NotNull PushNotification notification) {
         Form form = new Form();
         form.param("title", notification.getTitle())
                 .param("body", notification.getBody())
@@ -168,7 +171,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> T getObject(String objectId, Function<ObjectData, T> objectMapper) {
+    public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectMapper);
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId)
                 .request().get();
@@ -190,8 +193,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> T getObject(String objectId, Class<T> objectType) {
-        Objects.requireNonNull(objectType);
+    public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Class<T> objectType) {
         return getObject(objectId, data -> fromJson(data, objectType));
     }
 
@@ -199,7 +201,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> T addObject(String objectId, T target, Function<ObjectData, T> objectMapper) {
+    public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectMapper);
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("add")
                 .request().post(Entity.json(toJson(target)));
@@ -217,7 +219,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T addObject(String objectId, T target) {
+    public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
         return addObject(objectId, target, data -> fromJson(data, (Class<T>) target.getClass()));
     }
 
@@ -225,7 +227,8 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> T updateObject(String objectId, T target, Function<ObjectData, T> objectMapper) {
+    public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(target);
         Objects.requireNonNull(objectMapper);
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("update")
                 .request().post(Entity.json(toJson(target)));
@@ -247,7 +250,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T updateObject(String objectId, T target) {
+    public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
         return updateObject(objectId, target, data -> fromJson(data, (Class<T>) target.getClass()));
     }
 
@@ -255,7 +258,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final void removeObject(final String objectId) {
+    public void removeObject(@NotNull @Size(min = 1) String objectId) {
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("remove")
                 .request().post(Entity.form(new Form()));
         if (response.getStatus() != 200) {
@@ -267,7 +270,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> List<T> getList(String listId, Function<ObjectData, T> objectMapper) {
+    public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectMapper);
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId)
                 .request().get();
@@ -285,7 +288,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> List<T> getList(String listId, Class<T> objectType) {
+    public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Class<T> objectType) {
         Objects.requireNonNull(objectType);
         Jsonb jsonb = JsonbBuilder.create();
         return getList(listId, data -> jsonb.fromJson(data.getPayload(), objectType));
@@ -295,7 +298,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> T addToList(String listId, String objectId, T target, Function<ObjectData, T> objectMapper) {
+    public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectMapper);
         Jsonb jsonb = JsonbBuilder.create();
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId).path("add").path(objectId)
@@ -314,7 +317,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T addToList(String listId, String objectId, T target) {
+    public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
         Jsonb jsonb = JsonbBuilder.create();
         return addToList(listId, objectId, target, data -> jsonb.fromJson(data.getPayload(), (Class<T>) target.getClass()));
     }
@@ -323,7 +326,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public <T> T updateInList(String listId, String objectId, T target, Function<ObjectData, T> objectMapper) {
+    public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectMapper);
         Jsonb jsonb = JsonbBuilder.create();
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId).path("update").path(objectId)
@@ -346,7 +349,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T updateInList(String listId, String objectId, T target) {
+    public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
         Jsonb jsonb = JsonbBuilder.create();
         return updateInList(listId, objectId, target, data -> jsonb.fromJson(data.getPayload(), (Class<T>) target.getClass()));
     }
@@ -355,7 +358,7 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public void removeFromList(String listId, String objectId) {
+    public void removeFromList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId) {
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId).path("remove").path(objectId)
                 .request().post(Entity.form(new Form()));
         if (response.getStatus() != 200) {
