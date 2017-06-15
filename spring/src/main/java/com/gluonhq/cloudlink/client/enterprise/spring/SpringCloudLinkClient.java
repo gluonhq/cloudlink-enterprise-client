@@ -138,6 +138,8 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public PushNotification sendPushNotification(@NotNull @Valid PushNotification notification) {
+        Objects.requireNonNull(notification, "notification may not be null");
+
         return feignClient.sendPushNotification(
                 notification.getTitle(),
                 notification.getBody(),
@@ -156,6 +158,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.getObject(objectId);
         if (objData.getUid() == null) {
             return null;
@@ -169,6 +174,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Class<T> objectType) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(objectType, "objectType may not be null");
+
         ObjectData objData = feignClient.getObject(objectId);
         if (objData.getUid() == null) {
             return null;
@@ -182,6 +190,10 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.addObject(objectId, toJson(target));
         return objectMapper.apply(objData);
     }
@@ -192,6 +204,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         ObjectData objData = feignClient.addObject(objectId, toJson(target));
         return fromJson(objData, (Class<T>) target.getClass());
     }
@@ -201,6 +216,10 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.updateObject(objectId, toJson(target));
         if (objData.getUid() == null) {
             return null;
@@ -215,6 +234,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         ObjectData objData = feignClient.updateObject(objectId, toJson(target));
         if (objData.getUid() == null) {
             return null;
@@ -228,6 +250,8 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public void removeObject(@NotNull @Size(min = 1) String objectId) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+
         feignClient.removeObject(objectId);
     }
 
@@ -236,6 +260,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         List<ObjectData> objDataList = feignClient.getList(listId);
         return objDataList.stream().map(objectMapper).collect(Collectors.toList());
     }
@@ -245,6 +272,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Class<T> objectType) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectType, "objectType may not be null");
+
         List<ObjectData> objDataList = feignClient.getList(listId);
         return objDataList.stream().map(objData -> fromJson(objData, objectType)).collect(Collectors.toList());
     }
@@ -254,6 +284,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.addToList(listId, objectId, gson.toJson(target));
         return objectMapper.apply(objData);
     }
@@ -264,6 +299,10 @@ public class SpringCloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         ObjectData objData = feignClient.addToList(listId, objectId, gson.toJson(target));
         return fromJson(objData, (Class<T>) target.getClass());
     }
@@ -273,6 +312,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.updateInList(listId, objectId, gson.toJson(target));
         if (objData.getUid() == null) {
             return null;
@@ -287,6 +331,10 @@ public class SpringCloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         ObjectData objData = feignClient.updateInList(listId, objectId, gson.toJson(target));
         if (objData.getUid() == null) {
             return null;
@@ -300,6 +348,9 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     public void removeFromList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+
         feignClient.removeFromList(listId, objectId);
     }
 

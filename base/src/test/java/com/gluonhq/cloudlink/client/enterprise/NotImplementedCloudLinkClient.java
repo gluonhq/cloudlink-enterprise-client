@@ -40,6 +40,11 @@ import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Implementation of {@link CloudLinkClient} that throws a RuntimeException on
+ * each method call. This implementations is solely used for testing the bean
+ * validation of the CloudLinkClient methods.
+ */
 public class NotImplementedCloudLinkClient implements CloudLinkClient {
     @Override
     public PushNotification sendPushNotification(@NotNull @Valid PushNotification notification) {

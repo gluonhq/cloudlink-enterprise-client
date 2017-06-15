@@ -31,6 +31,7 @@
  */
 package com.gluonhq.cloudlink.client.enterprise;
 
+import com.gluonhq.cloudlink.client.enterprise.domain.PushNotification;
 import junit.framework.AssertionFailedError;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +42,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,7 +57,56 @@ public class CloudLinkClientValidationTest {
     }
 
     @Test
-    public void validateGetObject() throws NoSuchMethodException {
+    public void validateSendPushNotification() throws NoSuchMethodException {
+        String methodName = "sendPushNotification";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, PushNotification.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+
+        PushNotification pushNotification = new PushNotification();
+        pushNotification.setExpirationType(PushNotification.ExpirationType.WEEKS);
+        pushNotification.setExpirationAmount(5);
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {pushNotification});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "value must be between 0 and 4 when using expiration type WEEKS", methodName + ".arg0.expirationAmount");
+
+        pushNotification.setExpirationAmount(3);
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {pushNotification});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateGetObjectByMapper() throws NoSuchMethodException {
+        String methodName = "getObject";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, Function.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+
+        Function mapper = (obj) -> obj;
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", mapper});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", mapper});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", mapper});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateGetObjectByClass() throws NoSuchMethodException {
         String methodName = "getObject";
 
         CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
@@ -74,6 +125,55 @@ public class CloudLinkClientValidationTest {
         assertEquals(0, violations.size());
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", String.class});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateAddObject() throws NoSuchMethodException {
+        String methodName = "addObject";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, Object.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample"});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample"});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", "sample"});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateAddObjectWithMapper() throws NoSuchMethodException {
+        String methodName = "addObject";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, Object.class, Function.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
+        assertEquals(3, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg2");
+
+        Function mapper = (obj) -> obj;
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample", mapper});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample", mapper});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", "sample", mapper});
         assertEquals(0, violations.size());
     }
 
@@ -97,6 +197,232 @@ public class CloudLinkClientValidationTest {
         assertEquals(0, violations.size());
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", "sample"});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateUpdateObjectWithMapper() throws NoSuchMethodException {
+        String methodName = "updateObject";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, Object.class, Function.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
+        assertEquals(3, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg2");
+
+        Function mapper = (obj) -> obj;
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample", mapper});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample", mapper});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", "sample", mapper});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateRemoveObject() throws NoSuchMethodException {
+        String methodName = "removeObject";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {""});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  "});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier"});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateGetListByMapper() throws NoSuchMethodException {
+        String methodName = "getList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, Function.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+
+        Function mapper = (obj) -> obj;
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", mapper});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", mapper});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", mapper});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateGetListByClass() throws NoSuchMethodException {
+        String methodName = "getList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, Class.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", String.class});
+        assertEquals(1, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", String.class});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"objectIdentifier", String.class});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateAddToList() throws NoSuchMethodException {
+        String methodName = "addToList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, String.class, Object.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
+        assertEquals(3, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg2");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample"});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  ", "sample"});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"listIdentifier", "objectIdentifier", "sample"});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateAddToListWithMapper() throws NoSuchMethodException {
+        String methodName = "addToList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, String.class, Object.class, Function.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null, null});
+        assertEquals(4, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg2");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg3");
+
+        Function mapper = (obj) -> obj;
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample", mapper});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", " ", "sample", mapper});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"listIdentifier", "objectIdentifier", "sample", mapper});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateUpdateInList() throws NoSuchMethodException {
+        String methodName = "updateInList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, String.class, Object.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
+        assertEquals(3, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg2");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample"});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  ", "sample"});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"listIdentifier", "objectIdentifier", "sample"});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateUpdateInListWithMapper() throws NoSuchMethodException {
+        String methodName = "updateInList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, String.class, Object.class, Function.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null, null});
+        assertEquals(4, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg2");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg3");
+
+        Function mapper = (obj) -> obj;
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample", mapper});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  ", "sample", mapper});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"listIdentifier", "objectIdentifier", "sample", mapper});
+        assertEquals(0, violations.size());
+    }
+
+    @Test
+    public void validateRemoveFromList() throws NoSuchMethodException {
+        String methodName = "removeFromList";
+
+        CloudLinkClient cloudLinkClient = new NotImplementedCloudLinkClient();
+        Method method = CloudLinkClient.class.getMethod(methodName, String.class, String.class);
+
+        Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null,null});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "may not be null", methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", ""});
+        assertEquals(2, violations.size());
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  "});
+        assertEquals(0, violations.size());
+
+        violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[]{"listIdentifier", "objectIdentifier"});
         assertEquals(0, violations.size());
     }
 

@@ -140,6 +140,8 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public PushNotification sendPushNotification(@Valid @NotNull PushNotification notification) {
+        Objects.requireNonNull(notification, "notification may not be null");
+
         Form form = new Form();
         form.param("title", notification.getTitle())
                 .param("body", notification.getBody())
@@ -172,7 +174,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId)
                 .request().get();
         if (response.getStatus() == 200) {
@@ -194,6 +198,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Class<T> objectType) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(objectType, "objectType may not be null");
+
         return getObject(objectId, data -> fromJson(data, objectType));
     }
 
@@ -202,7 +209,10 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("add")
                 .request().post(Entity.json(toJson(target)));
         if (response.getStatus() == 200) {
@@ -220,6 +230,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         return addObject(objectId, target, data -> fromJson(data, (Class<T>) target.getClass()));
     }
 
@@ -228,8 +241,10 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(target);
-        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("update")
                 .request().post(Entity.json(toJson(target)));
         if (response.getStatus() == 200) {
@@ -251,6 +266,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         return updateObject(objectId, target, data -> fromJson(data, (Class<T>) target.getClass()));
     }
 
@@ -259,6 +277,8 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public void removeObject(@NotNull @Size(min = 1) String objectId) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("remove")
                 .request().post(Entity.form(new Form()));
         if (response.getStatus() != 200) {
@@ -271,7 +291,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId)
                 .request().get();
         if (response.getStatus() == 200) {
@@ -289,7 +311,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Class<T> objectType) {
-        Objects.requireNonNull(objectType);
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectType, "objectType may not be null");
+
         Jsonb jsonb = JsonbBuilder.create();
         return getList(listId, data -> jsonb.fromJson(data.getPayload(), objectType));
     }
@@ -299,7 +323,11 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         Jsonb jsonb = JsonbBuilder.create();
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId).path("add").path(objectId)
                 .request().post(Entity.json(jsonb.toJson(target)));
@@ -318,6 +346,10 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         Jsonb jsonb = JsonbBuilder.create();
         return addToList(listId, objectId, target, data -> jsonb.fromJson(data.getPayload(), (Class<T>) target.getClass()));
     }
@@ -327,6 +359,11 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         Objects.requireNonNull(objectMapper);
         Jsonb jsonb = JsonbBuilder.create();
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId).path("update").path(objectId)
@@ -350,6 +387,10 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         Jsonb jsonb = JsonbBuilder.create();
         return updateInList(listId, objectId, target, data -> jsonb.fromJson(data.getPayload(), (Class<T>) target.getClass()));
     }
@@ -359,6 +400,9 @@ public class JavaEECloudLinkClient implements CloudLinkClient {
      */
     @Override
     public void removeFromList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+
         Response response = webTarget.path("3").path("data").path("enterprise").path("list").path(listId).path("remove").path(objectId)
                 .request().post(Entity.form(new Form()));
         if (response.getStatus() != 200) {
