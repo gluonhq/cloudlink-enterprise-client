@@ -29,20 +29,12 @@ which is the reference implementation for JSON-B.
             <artifactId>cloudlink-enterprise-client-javaee</artifactId>
             <version>1.0.0</version>
         </dependency>
-    </dependencies>
 
-    <!-- only required if running with Java EE 7 -->
-    <repositories>
-	    <repository>
-            <id>Eclipse Yasson Releases</id>
-            <url>https://repo.eclipse.org/content/repositories/releases/</url>
-        </repository>
-    </repositories>
-    <dependencies>
+        <!-- only required if running with Java EE 7 -->
         <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>yasson</artifactId>
-            <version>1.0.0-M2</version>
+            <version>1.0</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
@@ -51,16 +43,9 @@ which is the reference implementation for JSON-B.
 
     dependencies {
         compile 'com.gluonhq:cloudlink-enterprise-client-javaee:1.0.0'
-    }
 
-    // only required if running with Java EE 7
-    repositories {
-        maven {
-            url 'https://repo.eclipse.org/content/repositories/releases/'
-        }
-    }
-    dependencies {
-        runtime 'org.eclipse:yasson:1.0.0-M2'
+        // only required if running with Java EE 7
+        runtime 'org.eclipse:yasson:1.0'
     }
 
 ### Instantiation ###
