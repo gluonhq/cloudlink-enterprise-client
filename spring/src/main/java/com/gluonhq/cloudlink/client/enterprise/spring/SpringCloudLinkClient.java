@@ -47,15 +47,13 @@ import feign.form.FormEncoder;
 import feign.gson.GsonDecoder;
 import feign.jaxrs.JAXRSContract;
 import feign.okhttp.OkHttpClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -63,6 +61,7 @@ import java.util.stream.Collectors;
 /**
  * An implementation of the {@link CloudLinkClient} using <a href="https://github.com/OpenFeign/feign">Feign</a>.
  */
+@Validated
 public class SpringCloudLinkClient implements CloudLinkClient {
 
     private static final Logger LOG = new Logger.ErrorLogger();
@@ -72,9 +71,6 @@ public class SpringCloudLinkClient implements CloudLinkClient {
     private final CloudLinkConfig config;
 
     private final FeignClient feignClient;
-
-    @Autowired
-    private Validator validator;
 
     /**
      * Construct a new CloudLinkClient instance with the specified configuration.
@@ -119,7 +115,7 @@ public class SpringCloudLinkClient implements CloudLinkClient {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T fromJson( ObjectData objData, Class<T> objectType ) {
+    private static <T> T fromJson(ObjectData objData, Class<T> objectType) {
         if (String.class.equals(objectType)) {
             return (T) gson.fromJson(objData.getPayload(), StringObject.class).getV();
         } else {
@@ -137,23 +133,12 @@ public class SpringCloudLinkClient implements CloudLinkClient {
         }
     }
 
-    private Validator getValidator() {
-        if (validator == null) {
-            this.validator = Validation.buildDefaultValidatorFactory().getValidator();
-        }
-        return validator;
-    }
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public final PushNotification sendPushNotification(final PushNotification notification) {
-
-        Set<ConstraintViolation<PushNotification>> violations = getValidator().validate(notification);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
-        }
+    public PushNotification sendPushNotification(@NotNull @Valid PushNotification notification) {
+        Objects.requireNonNull(notification, "notification may not be null");
 
         return feignClient.sendPushNotification(
                 notification.getTitle(),
@@ -172,9 +157,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> T getObject(final String objectId, final Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
-        ObjectData objData = feignClient.getObject(Objects.requireNonNull(objectId));
+    public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
+        ObjectData objData = feignClient.getObject(objectId);
         if (objData.getUid() == null) {
             return null;
         } else {
@@ -186,9 +173,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> T getObject(final String objectId, final Class<T> objectType) {
-        Objects.requireNonNull(objectType);
-        ObjectData objData = feignClient.getObject(Objects.requireNonNull(objectId));
+    public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Class<T> objectType) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(objectType, "objectType may not be null");
+
+        ObjectData objData = feignClient.getObject(objectId);
         if (objData.getUid() == null) {
             return null;
         } else {
@@ -200,9 +189,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> T addObject(final String objectId, final T target, final Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(target);
-        Objects.requireNonNull(objectMapper);
+    public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.addObject(objectId, toJson(target));
         return objectMapper.apply(objData);
     }
@@ -212,8 +203,10 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> T addObject(final String objectId, final T target) {
-        Objects.requireNonNull(target);
+    public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         ObjectData objData = feignClient.addObject(objectId, toJson(target));
         return fromJson(objData, (Class<T>) target.getClass());
     }
@@ -222,8 +215,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> T updateObject(final String objectId, final T target, final Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(target);
+    public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
         ObjectData objData = feignClient.updateObject(objectId, toJson(target));
         if (objData.getUid() == null) {
             return null;
@@ -237,8 +233,10 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> T updateObject(final String objectId, final T target) {
-        Objects.requireNonNull(target);
+    public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
         ObjectData objData = feignClient.updateObject(objectId, toJson(target));
         if (objData.getUid() == null) {
             return null;
@@ -251,17 +249,21 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final void removeObject(final String objectId) {
-        feignClient.removeObject(Objects.requireNonNull(objectId));
+    public void removeObject(@NotNull @Size(min = 1) String objectId) {
+        Objects.requireNonNull(objectId, "objectId may not be null");
+
+        feignClient.removeObject(objectId);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final <T> List<T> getList(final String listId, final Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
-        List<ObjectData> objDataList = feignClient.getList(Objects.requireNonNull(listId));
+    public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
+        List<ObjectData> objDataList = feignClient.getList(listId);
         return objDataList.stream().map(objectMapper).collect(Collectors.toList());
     }
 
@@ -269,9 +271,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> List<T> getList(final String listId, final Class<T> objectType) {
-        Objects.requireNonNull(objectType);
-        List<ObjectData> objDataList = feignClient.getList(Objects.requireNonNull(listId));
+    public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Class<T> objectType) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectType, "objectType may not be null");
+
+        List<ObjectData> objDataList = feignClient.getList(listId);
         return objDataList.stream().map(objData -> fromJson(objData, objectType)).collect(Collectors.toList());
     }
 
@@ -279,10 +283,13 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> T addToList(final String listId, final String objectId, final T target, final Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
-        ObjectData objData = feignClient.addToList(Objects.requireNonNull(listId),
-                Objects.requireNonNull(objectId), gson.toJson(target));
+    public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
+        ObjectData objData = feignClient.addToList(listId, objectId, gson.toJson(target));
         return objectMapper.apply(objData);
     }
 
@@ -291,9 +298,12 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> T addToList(final String listId, final String objectId, final T target) {
-        ObjectData objData = feignClient.addToList(Objects.requireNonNull(listId),
-                Objects.requireNonNull(objectId), gson.toJson(target));
+    public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
+        ObjectData objData = feignClient.addToList(listId, objectId, gson.toJson(target));
         return fromJson(objData, (Class<T>) target.getClass());
     }
 
@@ -301,10 +311,13 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final <T> T updateInList(final String listId, final String objectId, final T target, final Function<ObjectData, T> objectMapper) {
-        Objects.requireNonNull(objectMapper);
-        ObjectData objData = feignClient.updateInList(Objects.requireNonNull(listId),
-                Objects.requireNonNull(objectId), gson.toJson(target));
+    public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+        Objects.requireNonNull(objectMapper, "objectMapper may not be null");
+
+        ObjectData objData = feignClient.updateInList(listId, objectId, gson.toJson(target));
         if (objData.getUid() == null) {
             return null;
         } else {
@@ -317,9 +330,12 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> T updateInList(final String listId, final String objectId, final T target) {
-        ObjectData objData = feignClient.updateInList(Objects.requireNonNull(listId),
-                Objects.requireNonNull(objectId), gson.toJson(target));
+    public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+        Objects.requireNonNull(target, "target may not be null");
+
+        ObjectData objData = feignClient.updateInList(listId, objectId, gson.toJson(target));
         if (objData.getUid() == null) {
             return null;
         } else {
@@ -331,9 +347,11 @@ public class SpringCloudLinkClient implements CloudLinkClient {
      * {@inheritDoc}
      */
     @Override
-    public final void removeFromList(final String listId, final String objectId) {
-        feignClient.removeFromList(Objects.requireNonNull(listId),
-                Objects.requireNonNull(objectId));
+    public void removeFromList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId) {
+        Objects.requireNonNull(listId, "listId may not be null");
+        Objects.requireNonNull(objectId, "objectId may not be null");
+
+        feignClient.removeFromList(listId, objectId);
     }
 
 }

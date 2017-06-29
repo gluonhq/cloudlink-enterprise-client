@@ -36,6 +36,7 @@ import com.gluonhq.cloudlink.client.enterprise.domain.PushNotification;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.function.Function;
 
@@ -52,6 +53,7 @@ public interface CloudLinkClient {
      * @throws javax.validation.ConstraintViolationException when the provided push notification object fails to
      * validate
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when <code>notification</code> is <code>null</code>
      */
     PushNotification sendPushNotification(@NotNull @Valid PushNotification notification);
 
@@ -64,8 +66,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the returned object
      * @return the object attached to the specified identifier or <code>null</code> if no such object exists
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T getObject(String objectId, Function<ObjectData, T> objectMapper);
+    <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Function<ObjectData, T> objectMapper);
 
     /**
      * Retrieve an object with the specified identifier. If no object with such an identifier exists,
@@ -76,8 +79,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the returned object
      * @return the object attached to the specified identifier or <code>null</code> if no such object exists
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T getObject(String objectId, Class<T> objectType);
+    <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Class<T> objectType);
 
     /**
      * Adds the object with the specified identifier. If an object already exists with the specified identifier,
@@ -89,8 +93,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the added object
      * @return the newly added object
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T addObject(String objectId, T target, Function<ObjectData, T> objectMapper);
+    <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper);
 
     /**
      * Adds the object with the specified identifier. If an object already exists with the specified identifier,
@@ -101,8 +106,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the added object
      * @return the newly added object
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T addObject(String objectId, T target);
+    <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target);
 
     /**
      * Updates the object with the specified identifier. If no object exists with the specified identifier,
@@ -114,8 +120,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the updated object
      * @return the updated object or <code>null</code> if no object exists with the specified identifier
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T updateObject(String objectId, T target, Function<ObjectData, T> objectMapper);
+    <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper);
 
     /**
      * Updates the object with the specified identifier. If no object exists with the specified identifier,
@@ -126,16 +133,18 @@ public interface CloudLinkClient {
      * @param <T> the type of the updated object
      * @return the updated object or <code>null</code> if no object exists with the specified identifier
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T updateObject(String objectId, T target);
+    <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target);
 
     /**
      * Removes the object with the specified identifier.
      *
      * @param objectId the identifier of the object to remove
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when <code>objectId</code> is <code>null</code>
      */
-    void removeObject(String objectId);
+    void removeObject(@NotNull @Size(min = 1) String objectId);
 
     /**
      * Retrieve a list with the specified identifier. The returned list contains the list of objects
@@ -146,8 +155,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the objects in the list
      * @return the list attached to the specified identifier
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> List<T> getList(String listId, Function<ObjectData, T> objectMapper);
+    <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Function<ObjectData, T> objectMapper);
 
     /**
      * Retrieve a list with the specified identifier. The returned list contains the list of objects
@@ -158,8 +168,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the objects in the list
      * @return the list attached to the specified identifier
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> List<T> getList(String listId, Class<T> objectType);
+    <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Class<T> objectType);
 
     /**
      * Adds an object to the list with the specified identifiers.
@@ -171,8 +182,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the added object
      * @return the newly added object
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T addToList(String listId, String objectId, T target, Function<ObjectData, T> objectMapper);
+    <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper);
 
     /**
      * Adds an object to the list with the specified identifiers.
@@ -183,8 +195,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the added object
      * @return the newly added object
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T addToList(String listId, String objectId, T target);
+    <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target);
 
     /**
      * Updates an existing object in the list with the specified identifiers. When the object with the specified
@@ -197,8 +210,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the updated object
      * @return the updated object or <code>null</code> if no object exists in the list with the specified identifiers
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T updateInList(String listId, String objectId, T target, Function<ObjectData, T> objectMapper);
+    <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper);
 
     /**
      * Updates an existing object in the list with the specified identifiers. When the object with the specified
@@ -210,8 +224,9 @@ public interface CloudLinkClient {
      * @param <T> the type of the updated object
      * @return the updated object or <code>null</code> if no object exists in the list with the specified identifiers
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    <T> T updateInList(String listId, String objectId, T target);
+    <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target);
 
     /**
      * Removes the object from the list with the specified identifiers.
@@ -219,7 +234,8 @@ public interface CloudLinkClient {
      * @param listId the identifier of the list to remove the object from
      * @param objectId the identifier of the object to remove
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
+     * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    void removeFromList(String listId, String objectId);
+    void removeFromList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId);
 
 }
