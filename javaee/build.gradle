@@ -18,7 +18,7 @@ apply from: rootProject.file('../gradle/code-quality.gradle')
 sourceCompatibility = 1.8
 
 group = 'com.gluonhq'
-version = '1.1.0'
+version = '1.2.0-SNAPSHOT'
 
 archivesBaseName = 'cloudlink-enterprise-sdk-javaee'
 
