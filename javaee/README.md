@@ -1,13 +1,13 @@
 # Gluon CloudLink Enterprise SDK for Java EE #
 
-Gluon CloudLink Enterprise SDK for Java EE is a client SDK for accessing [Gluon CloudLink](http://com.gluonhq.com/products/cloudlink/)
+Gluon CloudLink Enterprise SDK for Java EE is a client SDK for accessing [Gluon CloudLink](http://gluonhq.com/products/cloudlink/)
 services from within an enterprise back end infrastructure that is running inside a [Java EE environment](http://docs.oracle.com/javaee/).
 
 ## Documentation ##
 
-* [JavaDoc](http://docs.com.gluonhq.com/cloudlink/enterprise/sdk/javaee/javadoc/)
-* [Gluon CloudLink](http://docs.com.gluonhq.com/cloudlink)
-* [Samples](http://com.gluonhq.com/support/samples/#cloudlink)
+* [JavaDoc](http://docs.gluonhq.com/cloudlink/enterprise/sdk/javaee/javadoc/)
+* [Gluon CloudLink](http://docs.gluonhq.com/cloudlink)
+* [Samples](http://gluonhq.com/support/samples/#cloudlink)
 
 ## Getting Started ##
 
