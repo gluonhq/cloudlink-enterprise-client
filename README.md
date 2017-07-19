@@ -1,6 +1,6 @@
-# Gluon CloudLink Enterprise Client #
+# Gluon CloudLink Enterprise Java SDK #
 
-Gluon CloudLink Enterprise Client is a Java client for accessing [Gluon CloudLink](http://com.gluonhq.com/products/cloudlink/)
+Gluon CloudLink Enterprise Java SDK is a Java client for accessing [Gluon CloudLink](http://com.gluonhq.com/products/cloudlink/)
 services from within an enterprise back end infrastructure. There are currently two implementations:
 
 * Java EE for running inside a [Java EE environment](http://docs.oracle.com/javaee/)
@@ -17,7 +17,7 @@ services from within an enterprise back end infrastructure. There are currently 
 ### Dependencies ###
 
 When your application is running inside a Java EE 8 environment, only a single maven dependency is required to
-use the CloudLink Enterprise Client. When you are running inside a Java EE 7 environment, you need to explicitly
+use the CloudLink Enterprise Java SDK. When you are running inside a Java EE 7 environment, you need to explicitly
 provide an implementation of the Java API for JSON Binding as well. You can use [Yasson](https://github.com/eclipse/yasson),
 which is the reference implementation for JSON-B.
 
