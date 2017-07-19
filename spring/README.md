@@ -1,13 +1,13 @@
 # Gluon CloudLink Enterprise SDK for Spring #
 
-Gluon CloudLink Enterprise SDK for Spring is a client SDK for accessing [Gluon CloudLink](http://com.gluonhq.com/products/cloudlink/)
+Gluon CloudLink Enterprise SDK for Spring is a client SDK for accessing [Gluon CloudLink](http://gluonhq.com/products/cloudlink/)
 services from within an enterprise back end infrastructure that is running together with the [Spring Framework](https://spring.io/).
 
 ## Documentation ##
 
-* [JavaDoc](http://docs.com.gluonhq.com/cloudlink/enterprise/sdk/spring/javadoc/)
-* [Gluon CloudLink](http://docs.com.gluonhq.com/cloudlink)
-* [Samples](http://com.gluonhq.com/support/samples/#cloudlink)
+* [JavaDoc](http://docs.gluonhq.com/cloudlink/enterprise/sdk/spring/javadoc/)
+* [Gluon CloudLink](http://docs.gluonhq.com/cloudlink)
+* [Samples](http://gluonhq.com/support/samples/#cloudlink)
 
 ## Getting Started ##
 
