@@ -29,8 +29,12 @@ repositories {
     }
 }
 
+configurations {
+    javadocSources
+}
+
 dependencies {
-    compile 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0-SNAPSHOT'
+    compile 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0'
 
     compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
     compile 'javax.json.bind:javax.json.bind-api:1.0'
@@ -43,11 +47,23 @@ dependencies {
     testRuntime 'org.eclipse:yasson:1.0'
     testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.Beta2'
     testRuntime 'org.glassfish:javax.el:3.0.1-b08'
+
+    javadocSources 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0:sources'
+}
+
+task unpackJavadocSources(type: Copy) {
+    into file("${buildDir}/unpacked/javadocSources")
+    from configurations.javadocSources.collect {
+        zipTree(it)
+    }
 }
 
 javadoc {
+    source fileTree(project.unpackJavadocSources.destinationDir).include('**/*.java')
+    title "Gluon CloudLink Enterprise SDK for Java EE ${version} API"
     exclude('com/gluonhq/impl/**/*')
 }
+javadoc.dependsOn tasks.unpackJavadocSources
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
