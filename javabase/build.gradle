@@ -20,29 +20,18 @@ sourceCompatibility = 1.8
 group = 'com.gluonhq'
 version = '1.1.0-SNAPSHOT'
 
-archivesBaseName = 'cloudlink-enterprise-sdk-javaee'
+archivesBaseName = 'cloudlink-enterprise-sdk-javabase'
 
 repositories {
     jcenter()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
 }
 
 dependencies {
-    compile 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0-SNAPSHOT'
-
-    compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
-    compile 'javax.json.bind:javax.json.bind-api:1.0'
-    compile 'org.glassfish:javax.json:1.1'
-    compile 'javax.enterprise:cdi-api:1.2'
+    compile 'javax.validation:validation-api:2.0.0.Beta2'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'io.vertx:vertx-core:3.4.1'
-    testCompile 'org.glassfish.jersey.core:jersey-client:2.22.2'
-    testRuntime 'org.eclipse:yasson:1.0'
-    testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.Beta2'
     testRuntime 'org.glassfish:javax.el:3.0.1-b08'
+    testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.Beta2'
 }
 
 javadoc {

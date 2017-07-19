@@ -1,10 +1,10 @@
-# Gluon CloudLink Enterprise Java SDK #
+# Gluon CloudLink Enterprise SDK #
 
-Gluon CloudLink Enterprise Java SDK is a Java client for accessing [Gluon CloudLink](http://com.gluonhq.com/products/cloudlink/)
+Gluon CloudLink Enterprise SDK is a client SDK for accessing [Gluon CloudLink](http://com.gluonhq.com/products/cloudlink/)
 services from within an enterprise back end infrastructure. There are currently two implementations:
 
-* Java EE for running inside a [Java EE environment](http://docs.oracle.com/javaee/)
-* Spring for running together with the [Spring Framework](https://spring.io/)
+* [Java EE](/javaee) for running inside a [Java EE environment](http://docs.oracle.com/javaee/)
+* [Spring](/spring) for running together with the [Spring Framework](https://spring.io/)
 
 ## Documentation ##
 
@@ -26,8 +26,8 @@ which is the reference implementation for JSON-B.
     <dependencies>
         <dependency>
             <groupId>com.gluonhq</groupId>
-            <artifactId>cloudlink-enterprise-client-javaee</artifactId>
-            <version>1.0.0</version>
+            <artifactId>cloudlink-enterprise-sdk-javaee</artifactId>
+            <version>1.1.0</version>
         </dependency>
 
         <!-- only required if running with Java EE 7 -->
@@ -42,7 +42,7 @@ which is the reference implementation for JSON-B.
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-enterprise-client-javaee:1.0.0'
+        compile 'com.gluonhq:cloudlink-enterprise-sdk-javaee:1.1.0'
 
         // only required if running with Java EE 7
         runtime 'org.eclipse:yasson:1.0'
@@ -70,15 +70,15 @@ which is the reference implementation for JSON-B.
     <dependencies>
         <dependency>
             <groupId>com.gluonhq</groupId>
-            <artifactId>cloudlink-enterprise-client-spring</artifactId>
-            <version>1.0.0</version>
+            <artifactId>cloudlink-enterprise-sdk-spring</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-enterprise-client-spring:1.0.0'
+        compile 'com.gluonhq:cloudlink-enterprise-sdk-spring:1.1.0'
     }
 
 ### Instantiation ###

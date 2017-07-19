@@ -1,5 +1,36 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply from: rootProject.file('../mavenPublish.gradle')
+apply from: rootProject.file('../gradle/code-quality.gradle')
+
+sourceCompatibility = 1.8
+
+group = 'com.gluonhq'
+version = '1.1.0-SNAPSHOT'
+
+archivesBaseName = 'cloudlink-enterprise-sdk-spring'
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
 dependencies {
-    compile project (':base')
+    compile 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0-SNAPSHOT'
 
     compile 'io.github.openfeign:feign-core:9.4.0'
     compile 'io.github.openfeign:feign-gson:9.4.0'
@@ -14,4 +45,22 @@ dependencies {
     testCompile 'io.vertx:vertx-core:3.4.1'
     testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.Beta2'
     testRuntime 'org.glassfish:javax.el:3.0.1-b08'
+}
+
+javadoc {
+    exclude('com/gluonhq/impl/**/*')
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+artifacts {
+    archives sourcesJar, javadocJar
 }

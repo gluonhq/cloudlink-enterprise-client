@@ -1,5 +1,0 @@
-rootProject.name = 'cloudlink-enterprise-client'
-
-include 'base'
-include 'javaee'
-include 'spring'

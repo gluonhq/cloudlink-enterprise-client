@@ -1,7 +1,7 @@
 apply plugin: 'com.github.hierynomus.license'
 
 license {
-    header = rootProject.file('gradle/HEADER')
+    header = rootProject.file('../gradle/HEADER')
     strictCheck = true
     skipExistingHeaders = true
     mapping {

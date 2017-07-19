@@ -47,15 +47,15 @@ install {
 
 private configurePOM(def pom) {
     pom.project {
-        name "Gluon CloudLink Enterprise Client - ${project.name.capitalize()}"
-        description "Gluon CloudLink Enterprise Client - ${project.name.capitalize()}"
-        url 'http://com.gluonhq.com/cloudlink'
+        name "Gluon CloudLink Enterprise SDK - ${project.name}"
+        description "Gluon CloudLink Enterprise SDK - ${project.name}"
+        url 'https://gluonhq.com/cloudlink'
         modelVersion '4.0.0'
         packaging 'jar'
         scm {
-            connection 'scm:git:https://github.org/com.gluonhq/cloudlink-enterprise-client.git'
-            developerConnection 'scm:git:https://github.org/com.gluonhq/cloudlink-enterprise-client.git'
-            url 'https://github.org/com.gluonhq/cloudlink-enterprise-client'
+            connection 'scm:git:https://github.com/gluonhq/cloudlink-enterprise-sdk.git'
+            developerConnection 'scm:git:https://github.com/gluonhq/cloudlink-enterprise-sdk.git'
+            url 'https://github.com/gluonhq/cloudlink-enterprise-sdk'
         }
         organization {
             name 'Gluon'
