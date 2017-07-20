@@ -89,14 +89,14 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
 
         Function mapper = (obj) -> obj;
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", mapper});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", mapper});
         assertEquals(0, violations.size());
@@ -114,12 +114,12 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", String.class});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", String.class});
         assertEquals(0, violations.size());
@@ -137,12 +137,12 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample"});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample"});
         assertEquals(0, violations.size());
@@ -160,7 +160,7 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
         assertEquals(3, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg2");
 
@@ -168,7 +168,7 @@ public class CloudLinkClientValidationTest {
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample", mapper});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample", mapper});
         assertEquals(0, violations.size());
@@ -186,12 +186,12 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample"});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample"});
         assertEquals(0, violations.size());
@@ -209,7 +209,7 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
         assertEquals(3, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg2");
 
@@ -217,7 +217,7 @@ public class CloudLinkClientValidationTest {
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "sample", mapper});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "sample", mapper});
         assertEquals(0, violations.size());
@@ -235,11 +235,11 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {""});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  "});
         assertEquals(0, violations.size());
@@ -257,14 +257,14 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
 
         Function mapper = (obj) -> obj;
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", mapper});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", mapper});
         assertEquals(0, violations.size());
@@ -282,12 +282,12 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", String.class});
         assertEquals(1, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", String.class});
         assertEquals(0, violations.size());
@@ -305,14 +305,14 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
         assertEquals(3, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg2");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample"});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  ", "sample"});
         assertEquals(0, violations.size());
@@ -330,8 +330,8 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null, null});
         assertEquals(4, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg2");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg3");
 
@@ -339,8 +339,8 @@ public class CloudLinkClientValidationTest {
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample", mapper});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", " ", "sample", mapper});
         assertEquals(0, violations.size());
@@ -358,14 +358,14 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null});
         assertEquals(3, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg2");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample"});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  ", "sample"});
         assertEquals(0, violations.size());
@@ -383,8 +383,8 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null, null, null, null});
         assertEquals(4, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg2");
         assertMessageForProperty(violations, "must not be null", methodName + ".arg3");
 
@@ -392,8 +392,8 @@ public class CloudLinkClientValidationTest {
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", "", "sample", mapper});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  ", "sample", mapper});
         assertEquals(0, violations.size());
@@ -411,13 +411,13 @@ public class CloudLinkClientValidationTest {
 
         Set<ConstraintViolation<CloudLinkClient>> violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {null,null});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg0");
-        assertMessageForProperty(violations, "must not be null", methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"", ""});
         assertEquals(2, violations.size());
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg0");
-        assertMessageForProperty(violations, "size must be between 1 and " + Integer.MAX_VALUE, methodName + ".arg1");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg0");
+        assertMessageForProperty(violations, "must not be empty", methodName + ".arg1");
 
         violations = validator.forExecutables().validateParameters(cloudLinkClient, method, new Object[] {"  ", "  "});
         assertEquals(0, violations.size());
