@@ -29,9 +29,28 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/**
- * Contains the implementation of the {@link com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClient} for using
- * inside projects that work with the <a href="https://spring.io">Spring Framework</a>. The underlying REST client
- * itself is written using the open source Feign project: <a href="https://github.com/OpenFeign/feign">https://github.com/OpenFeign/feign</a>.
- */
-package com.gluonhq.cloudlink.enterprise.sdk.spring;
+package com.gluonhq.impl.cloudlink.enterprise.sdk.javaee.validation;
+
+import com.gluonhq.cloudlink.enterprise.sdk.javaee.domain.PushNotification;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class MaxPushNotificationExpirationValidator implements ConstraintValidator<MaxPushNotificationExpiration, PushNotification> {
+
+    @Override
+    public void initialize(MaxPushNotificationExpiration constraintAnnotation) {
+    }
+
+    @Override
+    public boolean isValid(PushNotification notification, ConstraintValidatorContext context) {
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
+                .addPropertyNode("expirationAmount")
+                .addConstraintViolation();
+
+        return notification == null || notification.getExpirationType() == null ||
+                (notification.getExpirationAmount() >= 0 &&
+                notification.getExpirationAmount() <= notification.getExpirationType().getMaxAmount());
+    }
+}

@@ -29,9 +29,24 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/**
- * Contains the implementation of the {@link com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClient} for using
- * inside projects that work with the <a href="https://spring.io">Spring Framework</a>. The underlying REST client
- * itself is written using the open source Feign project: <a href="https://github.com/OpenFeign/feign">https://github.com/OpenFeign/feign</a>.
- */
-package com.gluonhq.cloudlink.enterprise.sdk.spring;
+package com.gluonhq.impl.cloudlink.enterprise.sdk.javaee.validation;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = { ValidPushNotificationTargetValidator.class })
+public @interface ValidPushNotificationTarget {
+
+    String message() default "{com.gluonhq.impl.cloudlink.enterprise.sdk.validation.ValidPushNotificationTarget.message}";
+
+    Class<?>[] groups() default { };
+
+    Class<? extends Payload>[] payload() default { };
+
+}

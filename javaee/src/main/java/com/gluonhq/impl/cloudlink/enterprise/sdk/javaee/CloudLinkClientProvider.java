@@ -31,9 +31,9 @@
  */
 package com.gluonhq.impl.cloudlink.enterprise.sdk.javaee;
 
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClient;
+import com.gluonhq.cloudlink.enterprise.sdk.javaee.CloudLinkClientConfig;
 import com.gluonhq.cloudlink.enterprise.sdk.javaee.CloudLinkConfig;
-import com.gluonhq.cloudlink.enterprise.sdk.javaee.JavaEECloudLinkClient;
+import com.gluonhq.cloudlink.enterprise.sdk.javaee.CloudLinkClient;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Produces;
@@ -42,12 +42,12 @@ import javax.enterprise.inject.spi.InjectionPoint;
 public class CloudLinkClientProvider {
 
     @Produces @CloudLinkConfig(serverKey = "") @Any
-    public CloudLinkClient javaEECloudLinkClient(JavaEECloudLinkClient client, InjectionPoint injectionPoint) {
+    public CloudLinkClient cloudLinkClient(CloudLinkClient client, InjectionPoint injectionPoint) {
         String hostname = injectionPoint.getAnnotated().getAnnotation(CloudLinkConfig.class).hostname();
         String serverKey = injectionPoint.getAnnotated().getAnnotation(CloudLinkConfig.class).serverKey();
 
-        com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkConfig config = new com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkConfig(hostname, serverKey);
-        client.setCloudLinkConfig(config);
+        CloudLinkClientConfig config = new CloudLinkClientConfig(hostname, serverKey);
+        client.setCloudLinkClientConfig(config);
         return client;
     }
 }

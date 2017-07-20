@@ -31,11 +31,8 @@
  */
 package com.gluonhq.cloudlink.enterprise.sdk.javaee;
 
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClient;
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClientException;
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkConfig;
-import com.gluonhq.cloudlink.enterprise.sdk.base.domain.PushNotification;
-import com.gluonhq.cloudlink.enterprise.sdk.base.domain.PushNotificationTarget;
+import com.gluonhq.cloudlink.enterprise.sdk.javaee.domain.PushNotification;
+import com.gluonhq.cloudlink.enterprise.sdk.javaee.domain.PushNotificationTarget;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
@@ -99,9 +96,9 @@ public class PushTest {
                 }
             });
 
-            CloudLinkConfig config = new CloudLinkConfig("http://localhost:45010", "");
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
             config.setLogLevel(Level.FINE);
-            CloudLinkClient client = new JavaEECloudLinkClient(config);
+            CloudLinkClient client = new CloudLinkClient(config);
 
             PushNotification pushNotification = new PushNotification();
             pushNotification.setTitle("Title");

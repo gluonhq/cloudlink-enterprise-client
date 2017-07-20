@@ -24,48 +24,30 @@ archivesBaseName = 'cloudlink-enterprise-sdk-spring'
 
 repositories {
     jcenter()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
-}
-
-configurations {
-    javadocSources
 }
 
 dependencies {
-    compile 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0'
-
     compile 'io.github.openfeign:feign-core:9.4.0'
     compile 'io.github.openfeign:feign-gson:9.4.0'
     compile 'io.github.openfeign:feign-jaxrs:9.4.0'
     compile 'io.github.openfeign:feign-okhttp:9.4.0'
     compile 'io.github.openfeign.form:feign-form:2.1.0'
 
+    compile 'javax.validation:validation-api:1.1.0.Final'
+
     compile 'org.springframework:spring-web:4.3.8.RELEASE'
     compile 'org.springframework.boot:spring-boot-autoconfigure:1.5.3.RELEASE'
 
     testCompile 'junit:junit:4.12'
     testCompile 'io.vertx:vertx-core:3.4.1'
-    testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.Beta2'
+    testRuntime 'org.hibernate:hibernate-validator:5.4.1.Final'
     testRuntime 'org.glassfish:javax.el:3.0.1-b08'
-
-    javadocSources 'com.gluonhq:cloudlink-enterprise-sdk-javabase:1.1.0:sources'
-}
-
-task unpackJavadocSources(type: Copy) {
-    into file("${buildDir}/unpacked/javadocSources")
-    from configurations.javadocSources.collect {
-        zipTree(it)
-    }
 }
 
 javadoc {
-    source fileTree(project.unpackJavadocSources.destinationDir).include('**/*.java')
     title "Gluon CloudLink Enterprise SDK for Spring ${version} API"
     exclude('com/gluonhq/impl/**/*')
 }
-javadoc.dependsOn tasks.unpackJavadocSources
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allSource

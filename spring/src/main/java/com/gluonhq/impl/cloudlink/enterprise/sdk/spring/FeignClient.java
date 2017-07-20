@@ -31,9 +31,9 @@
  */
 package com.gluonhq.impl.cloudlink.enterprise.sdk.spring;
 
-import com.gluonhq.cloudlink.enterprise.sdk.base.domain.ObjectData;
-import com.gluonhq.cloudlink.enterprise.sdk.base.domain.PushNotification;
-import com.gluonhq.cloudlink.enterprise.sdk.base.domain.PushNotificationTarget;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.domain.ObjectData;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.domain.PushNotification;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.domain.PushNotificationTarget;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;

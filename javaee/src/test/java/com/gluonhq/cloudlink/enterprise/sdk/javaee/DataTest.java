@@ -31,9 +31,6 @@
  */
 package com.gluonhq.cloudlink.enterprise.sdk.javaee;
 
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClient;
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClientException;
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkConfig;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
@@ -86,9 +83,9 @@ public class DataTest {
                 }
             });
 
-            CloudLinkConfig config = new CloudLinkConfig("http://localhost:45010", "");
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
             config.setLogLevel(Level.FINE);
-            CloudLinkClient client = new JavaEECloudLinkClient(config);
+            CloudLinkClient client = new CloudLinkClient(config);
 
             Sample sample = client.getObject(identifier, Sample.class);
             assertNotNull(sample);
@@ -116,9 +113,9 @@ public class DataTest {
                                 .build().toString());
             });
 
-            CloudLinkConfig config = new CloudLinkConfig("http://localhost:45010", "");
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
             config.setLogLevel(Level.FINE);
-            CloudLinkClient client = new JavaEECloudLinkClient(config);
+            CloudLinkClient client = new CloudLinkClient(config);
 
             Sample sample = client.getObject(identifier, Sample.class);
             assertNull(sample);
@@ -177,9 +174,9 @@ public class DataTest {
                 }
             });
 
-            CloudLinkConfig config = new CloudLinkConfig("http://localhost:45010", "");
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
             config.setLogLevel(Level.FINE);
-            CloudLinkClient client = new JavaEECloudLinkClient(config);
+            CloudLinkClient client = new CloudLinkClient(config);
 
             Sample sample = new Sample();
             sample.setFoo("bar");
@@ -220,9 +217,9 @@ public class DataTest {
                 });
             });
 
-            CloudLinkConfig config = new CloudLinkConfig("http://localhost:45010", "");
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
             config.setLogLevel(Level.FINE);
-            CloudLinkClient client = new JavaEECloudLinkClient(config);
+            CloudLinkClient client = new CloudLinkClient(config);
 
             String stored = client.addObject(identifier, sample);
             assertNotNull(stored);

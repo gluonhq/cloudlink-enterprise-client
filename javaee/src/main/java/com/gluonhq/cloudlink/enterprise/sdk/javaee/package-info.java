@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * Contains the implementation of the {@link com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClient} using the
+ * Contains the implementation of the {@link com.gluonhq.cloudlink.enterprise.sdk.javaee.CloudLinkClient} using the
  * JAX-RS Client project: <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/client/package-summary.html">https://docs.oracle.com/javaee/7/api/javax/ws/rs/client/package-summary.html</a>
  */
 package com.gluonhq.cloudlink.enterprise.sdk.javaee;
