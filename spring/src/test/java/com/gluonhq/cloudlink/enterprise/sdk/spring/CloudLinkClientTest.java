@@ -35,7 +35,6 @@ import com.gluonhq.cloudlink.enterprise.sdk.spring.domain.PushNotification;
 import com.gluonhq.cloudlink.enterprise.sdk.spring.domain.PushNotificationTarget;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerRequest;
 import org.junit.Assert;
@@ -46,70 +45,75 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-public class PushTest {
+public class CloudLinkClientTest {
 
     @Test
-    public void sendPushNotification() {
+    public void testValidAuthentication() {
         String identifier = UUID.randomUUID().toString();
+        String serverKey = UUID.randomUUID().toString();
 
         HttpServer httpServer = null;
         try {
             httpServer = startHttpServer(request -> {
-                request.setExpectMultipart(true);
-
-                if (request.method() == HttpMethod.POST) {
-                    request.endHandler(event -> {
-                        if (!"Title".equals(request.getFormAttribute("title"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <Title> but was: <" + request.getFormAttribute("title") + ">");
-                        } else if (!"Body".equals(request.getFormAttribute("body"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <Body> but was: <" + request.getFormAttribute("body") + ">");
-                        } else if (!"0".equals(request.getFormAttribute("deliveryDate"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <0> but was: <" + request.getFormAttribute("deliveryDate") + ">");
-                        } else if (!"HIGH".equals(request.getFormAttribute("priority"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <HIGH> but was: <" + request.getFormAttribute("priority") + ">");
-                        } else if (!"DAYS".equals(request.getFormAttribute("expirationType"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <DAYS> but was: <" + request.getFormAttribute("expirationType") + ">");
-                        } else if (!"5".equals(request.getFormAttribute("expirationAmount"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <5> but was: <" + request.getFormAttribute("expirationAmount") + ">");
-                        } else if (!"ALL_DEVICES".equals(request.getFormAttribute("targetType"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <ALL_DEVICES> but was: <" + request.getFormAttribute("targetType") + ">");
-                        } else if (!"false".equals(request.getFormAttribute("invisible"))) {
-                            request.response().setStatusCode(500)
-                                    .end("Expected: <false> but was <" + request.getFormAttribute("invisible") + ">");
-                        } else {
-                            request.response()
-                                    .setStatusCode(200)
-                                    .end("{\"identifier\":\"" + identifier + "\"}");
-                        }
-                    });
+                String authorization = request.getHeader("authorization");
+                if ( ("Gluon " + serverKey).equals(authorization) ) {
+                    request.response().setStatusCode(200)
+                            .end("{\"identifier\":\"" + identifier + "\"}");
                 } else {
-                    request.response().setStatusCode(500).end();
+                    request.response().setStatusCode(401).end();
                 }
             });
 
-            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", serverKey);
             config.setLogLevel(Level.INFO);
             CloudLinkClient client = new CloudLinkClient(config);
 
-            PushNotification pushNotification = new PushNotification();
-            pushNotification.setTitle("Title");
-            pushNotification.setBody("Body");
-            pushNotification.setPriority(PushNotification.Priority.HIGH);
-            pushNotification.setExpirationType(PushNotification.ExpirationType.DAYS);
-            pushNotification.setExpirationAmount(5);
-            pushNotification.getTarget().setType(PushNotificationTarget.Type.ALL_DEVICES);
-
-            PushNotification notification = client.sendPushNotification(pushNotification);
+            PushNotification notification = client.sendPushNotification(buildPushNotification());
 
             Assert.assertNotNull(notification);
             Assert.assertEquals(identifier, notification.getIdentifier());
+        } finally {
+            if (httpServer != null) {
+                httpServer.close();
+            }
+        }
+    }
+
+    private PushNotification buildPushNotification() {
+        PushNotification pushNotification = new PushNotification();
+        pushNotification.setTitle("Title");
+        pushNotification.setBody("Body");
+        pushNotification.setPriority(PushNotification.Priority.HIGH);
+        pushNotification.setExpirationType(PushNotification.ExpirationType.DAYS);
+        pushNotification.setExpirationAmount(5);
+        pushNotification.getTarget().setType(PushNotificationTarget.Type.ALL_DEVICES);
+        return pushNotification;
+    }
+
+    @Test
+    public void testInvalidAuthentication() {
+        String serverKey = UUID.randomUUID().toString();
+
+        HttpServer httpServer = null;
+        try {
+            httpServer = startHttpServer(request -> {
+                request.response()
+                        .putHeader("Content-Type", "application/json; charset=UTF-8")
+                        .setStatusCode(401)
+                        .end();
+            });
+
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", serverKey);
+            config.setLogLevel(Level.INFO);
+            CloudLinkClient client = new CloudLinkClient(config);
+
+            try {
+                client.sendPushNotification(buildPushNotification());
+                Assert.fail("CloudLinkClientException must be thrown.");
+            } catch (CloudLinkClientException e) {
+                Assert.assertEquals(401, e.getStatus());
+                Assert.assertEquals("Unauthorized", e.getMessage());
+            }
         } finally {
             if (httpServer != null) {
                 httpServer.close();

@@ -41,8 +41,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Qualifier to provide the necessary configuration properties when injecting an instance
- * of {@link com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClient}. The qualifier is used in conjunction with the Inject
- * annotation:
+ * of {@link com.gluonhq.cloudlink.enterprise.sdk.javaee.CloudLinkClient}. The qualifier is used in conjunction with
+ * the Inject annotation:
  *
  * <pre><code>
    {@literal @}Inject

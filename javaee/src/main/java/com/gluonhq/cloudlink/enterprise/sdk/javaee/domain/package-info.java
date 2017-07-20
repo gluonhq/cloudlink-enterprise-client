@@ -30,8 +30,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * Contains the implementation of the {@link com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClient} for using
- * inside projects that work with the <a href="https://spring.io">Spring Framework</a>. The underlying REST client
- * itself is written using the open source Feign project: <a href="https://github.com/OpenFeign/feign">https://github.com/OpenFeign/feign</a>.
+ * Contains the various Gluon CloudLink domain objects that are used throughout the Enterprise Client API.
  */
-package com.gluonhq.cloudlink.enterprise.sdk.spring;
+package com.gluonhq.cloudlink.enterprise.sdk.javaee.domain;

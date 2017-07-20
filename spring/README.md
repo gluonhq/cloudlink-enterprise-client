@@ -16,7 +16,7 @@ services from within an enterprise back end infrastructure that is running toget
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-enterprise-sdk-spring:1.1.0'
+        compile 'com.gluonhq:cloudlink-enterprise-sdk-spring:1.2.0'
     }
 
 #### Maven ####
@@ -25,7 +25,7 @@ services from within an enterprise back end infrastructure that is running toget
         <dependency>
             <groupId>com.gluonhq</groupId>
             <artifactId>cloudlink-enterprise-sdk-spring</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 
@@ -48,5 +48,5 @@ Then inject the CloudLinkClient instance as follows:
 
 #### Manual ####
 
-    CloudLinkConfig config = new CloudLinkConfig("YOUR_SERVER_KEY");
-    CloudLinkClient client = new SpringCloudLinkClient(config);
+    CloudLinkClientConfig config = new CloudLinkClientConfig("YOUR_SERVER_KEY");
+    CloudLinkClient client = new CloudLinkClient(config);

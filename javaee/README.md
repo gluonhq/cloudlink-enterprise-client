@@ -55,5 +55,5 @@ which is the reference implementation for JSON-B.
 
 #### Manual ####
 
-    CloudLinkConfig config = new CloudLinkConfig("YOUR_SERVER_KEY");
-    CloudLinkClient client = new JavaEECloudLinkClient(config);
+    CloudLinkClientConfig config = new CloudLinkClientConfig("YOUR_SERVER_KEY");
+    CloudLinkClient client = new CloudLinkClient(config);

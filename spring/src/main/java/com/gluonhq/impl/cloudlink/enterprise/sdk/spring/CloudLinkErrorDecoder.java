@@ -31,8 +31,8 @@
  */
 package com.gluonhq.impl.cloudlink.enterprise.sdk.spring;
 
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClientException;
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkConfig;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClientConfig;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClientException;
 import feign.FeignException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -43,9 +43,9 @@ import java.util.logging.Level;
 
 public class CloudLinkErrorDecoder implements ErrorDecoder {
 
-    private final CloudLinkConfig config;
+    private final CloudLinkClientConfig config;
 
-    public CloudLinkErrorDecoder(CloudLinkConfig config) {
+    public CloudLinkErrorDecoder(CloudLinkClientConfig config) {
         this.config = config;
     }
 

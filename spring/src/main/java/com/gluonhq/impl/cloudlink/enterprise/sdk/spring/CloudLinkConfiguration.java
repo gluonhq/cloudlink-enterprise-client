@@ -31,9 +31,8 @@
  */
 package com.gluonhq.impl.cloudlink.enterprise.sdk.spring;
 
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkClient;
-import com.gluonhq.cloudlink.enterprise.sdk.base.CloudLinkConfig;
-import com.gluonhq.cloudlink.enterprise.sdk.spring.SpringCloudLinkClient;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClient;
+import com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClientConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +52,6 @@ public class CloudLinkConfiguration {
 
     @Bean
     public CloudLinkClient cloudLinkClient() {
-        return new SpringCloudLinkClient(new CloudLinkConfig(endpoint, serverKey));
+        return new CloudLinkClient(new CloudLinkClientConfig(endpoint, serverKey));
     }
 }

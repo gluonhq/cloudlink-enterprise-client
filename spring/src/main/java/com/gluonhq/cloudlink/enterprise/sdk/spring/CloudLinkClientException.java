@@ -29,9 +29,58 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/**
- * Contains the implementation of the {@link com.gluonhq.cloudlink.enterprise.sdk.spring.CloudLinkClient} for using
- * inside projects that work with the <a href="https://spring.io">Spring Framework</a>. The underlying REST client
- * itself is written using the open source Feign project: <a href="https://github.com/OpenFeign/feign">https://github.com/OpenFeign/feign</a>.
- */
 package com.gluonhq.cloudlink.enterprise.sdk.spring;
+
+/**
+ * Exception for handling invalid status codes of HTTP calls.
+ */
+public class CloudLinkClientException extends RuntimeException {
+
+    private int status;
+    private String body;
+
+    /**
+     * Creates a new CloudLinkClientException with the specified status and message.
+     *
+     * @param status the http status code of the response
+     * @param message the http reason phrase of the response
+     */
+    public CloudLinkClientException(int status, String message) {
+        super(message);
+
+        this.status = status;
+        this.body = null;
+    }
+
+    /**
+     * Creates a new CloudLinkClientException with the specified status, message and body.
+     *
+     * @param status the http status code of the response
+     * @param message the http reason phrase of the response
+     * @param body the http body of the response
+     */
+    public CloudLinkClientException(int status, String message, String body) {
+        super(message);
+
+        this.status = status;
+        this.body = body;
+    }
+
+    /**
+     * Returns the http status code that was defined in the http response.
+     *
+     * @return the http status code of the response
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * Returns the http body that was returned in the http response.
+     *
+     * @return the http body of the response
+     */
+    public String getBody() {
+        return body;
+    }
+}
