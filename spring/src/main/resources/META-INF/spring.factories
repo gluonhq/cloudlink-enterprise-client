@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=CloudLinkConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gluonhq.impl.cloudlink.enterprise.sdk.spring.CloudLinkConfiguration
