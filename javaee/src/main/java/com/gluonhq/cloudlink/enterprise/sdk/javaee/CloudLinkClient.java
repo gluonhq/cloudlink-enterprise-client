@@ -46,8 +46,8 @@ import javax.json.bind.JsonbBuilder;
 import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -183,7 +183,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Function<ObjectData, T> objectMapper) {
+    public <T> T getObject(@NotEmpty String objectId, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(objectMapper, "objectMapper may not be null");
 
@@ -214,7 +214,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> T getObject(@NotNull @Size(min = 1) String objectId, @NotNull Class<T> objectType) {
+    public <T> T getObject(@NotEmpty String objectId, @NotNull Class<T> objectType) {
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(objectType, "objectType may not be null");
 
@@ -233,7 +233,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+    public <T> T addObject(@NotEmpty String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
         Objects.requireNonNull(objectMapper, "objectMapper may not be null");
@@ -261,7 +261,7 @@ public class CloudLinkClient {
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
     @SuppressWarnings("unchecked")
-    public <T> T addObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+    public <T> T addObject(@NotEmpty String objectId, @NotNull T target) {
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
 
@@ -280,7 +280,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+    public <T> T updateObject(@NotEmpty String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
         Objects.requireNonNull(objectMapper, "objectMapper may not be null");
@@ -312,7 +312,7 @@ public class CloudLinkClient {
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
     @SuppressWarnings("unchecked")
-    public <T> T updateObject(@NotNull @Size(min = 1) String objectId, @NotNull T target) {
+    public <T> T updateObject(@NotEmpty String objectId, @NotNull T target) {
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
 
@@ -326,7 +326,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when <code>objectId</code> is <code>null</code>
      */
-    public void removeObject(@NotNull @Size(min = 1) String objectId) {
+    public void removeObject(@NotEmpty String objectId) {
         Objects.requireNonNull(objectId, "objectId may not be null");
 
         Response response = webTarget.path("3").path("data").path("enterprise").path("object").path(objectId).path("remove")
@@ -347,7 +347,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Function<ObjectData, T> objectMapper) {
+    public <T> List<T> getList(@NotEmpty String listId, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectMapper, "objectMapper may not be null");
 
@@ -374,7 +374,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> List<T> getList(@NotNull @Size(min = 1) String listId, @NotNull Class<T> objectType) {
+    public <T> List<T> getList(@NotEmpty String listId, @NotNull Class<T> objectType) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectType, "objectType may not be null");
 
@@ -394,7 +394,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+    public <T> T addToList(@NotEmpty String listId, @NotEmpty String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
@@ -424,7 +424,7 @@ public class CloudLinkClient {
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
     @SuppressWarnings("unchecked")
-    public <T> T addToList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+    public <T> T addToList(@NotEmpty String listId, @NotEmpty String objectId, @NotNull T target) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
@@ -446,7 +446,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
+    public <T> T updateInList(@NotEmpty String listId, @NotEmpty String objectId, @NotNull T target, @NotNull Function<ObjectData, T> objectMapper) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
@@ -482,7 +482,7 @@ public class CloudLinkClient {
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
     @SuppressWarnings("unchecked")
-    public <T> T updateInList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId, @NotNull T target) {
+    public <T> T updateInList(@NotEmpty String listId, @NotEmpty String objectId, @NotNull T target) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectId, "objectId may not be null");
         Objects.requireNonNull(target, "target may not be null");
@@ -499,7 +499,7 @@ public class CloudLinkClient {
      * @throws CloudLinkClientException when an invalid HTTP response is returned from the request to Gluon CloudLink
      * @throws NullPointerException when any of the parameters is <code>null</code>
      */
-    public void removeFromList(@NotNull @Size(min = 1) String listId, @NotNull @Size(min = 1) String objectId) {
+    public void removeFromList(@NotEmpty String listId, @NotEmpty String objectId) {
         Objects.requireNonNull(listId, "listId may not be null");
         Objects.requireNonNull(objectId, "objectId may not be null");
 
