@@ -146,6 +146,7 @@ public class CloudLinkClient {
         Objects.requireNonNull(notification, "notification may not be null");
 
         return feignClient.sendPushNotification(
+                notification.getCustomIdentifier(),
                 notification.getTitle(),
                 notification.getBody(),
                 notification.getDeliveryDate(),

@@ -54,7 +54,8 @@ public interface FeignClient {
     @Path("push/enterprise/notification")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON + "; " + CHARSET)
-    PushNotification sendPushNotification(@FormParam("title") String title,
+    PushNotification sendPushNotification(@FormParam("customIdentifier") String customIdentifier,
+            @FormParam("title") String title,
             @FormParam("body") String body,
             @FormParam("deliveryDate") long deliveryDate,
             @FormParam("priority") PushNotification.Priority priority,

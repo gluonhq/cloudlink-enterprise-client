@@ -45,6 +45,7 @@ public class PushNotification {
 
     private String identifier;
     private long creationDate;
+    private String customIdentifier = "";
     private String title = "";
     private String body = "";
     private long deliveryDate = 0;
@@ -112,6 +113,25 @@ public class PushNotification {
      */
     public void setCreationDate(long creationDate) {
         this.creationDate = creationDate;
+    }
+
+    /**
+     * Returns the custom identifier for the push notification.
+     *
+     * @return the custom identifier for the push notification
+     */
+    @NotNull
+    public String getCustomIdentifier() {
+        return customIdentifier;
+    }
+
+    /**
+     * Sets the custom identifier for the push notification.
+     *
+     * @param customIdentifier the custom identifier of the push notification
+     */
+    public void setCustomIdentifier(String customIdentifier) {
+        this.customIdentifier = customIdentifier;
     }
 
     /**
@@ -317,6 +337,7 @@ public class PushNotification {
     public String toString() {
         return "PushNotification{" +
                 "identifier='" + identifier + '\'' +
+                ", customIdentifier='" + customIdentifier + '\'' +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 ", deliveryDate=" + deliveryDate +
