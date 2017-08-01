@@ -51,6 +51,7 @@ public class PushTest {
     @Test
     public void sendPushNotification() {
         String identifier = UUID.randomUUID().toString();
+        String customIdentifier = UUID.randomUUID().toString();
 
         HttpServer httpServer = null;
         try {
@@ -59,7 +60,10 @@ public class PushTest {
 
                 if (request.method() == HttpMethod.POST) {
                     request.endHandler(event -> {
-                        if (!"Title".equals(request.getFormAttribute("title"))) {
+                        if (!"CustomId".equals(request.getFormAttribute("customIdentifier"))) {
+                            request.response().setStatusCode(500)
+                                    .end("Expected <CustomId> but was: <" + request.getFormAttribute("customIdentifier") + ">");
+                        } else if (!"Title".equals(request.getFormAttribute("title"))) {
                             request.response().setStatusCode(500)
                                     .end("Expected: <Title> but was: <" + request.getFormAttribute("title") + ">");
                         } else if (!"Body".equals(request.getFormAttribute("body"))) {
@@ -86,7 +90,7 @@ public class PushTest {
                         } else {
                             request.response()
                                     .setStatusCode(200)
-                                    .end("{\"identifier\":\"" + identifier + "\"}");
+                                    .end("{\"identifier\":\"" + identifier + "\",\"customIdentifier\":\"" + customIdentifier + "\"}");
                         }
                     });
                 } else {
@@ -99,6 +103,7 @@ public class PushTest {
             CloudLinkClient client = new CloudLinkClient(config);
 
             PushNotification pushNotification = new PushNotification();
+            pushNotification.setCustomIdentifier("CustomId");
             pushNotification.setTitle("Title");
             pushNotification.setBody("Body");
             pushNotification.setPriority(PushNotification.Priority.HIGH);
@@ -110,6 +115,7 @@ public class PushTest {
 
             Assert.assertNotNull(notification);
             Assert.assertEquals(identifier, notification.getIdentifier());
+            Assert.assertEquals(customIdentifier, notification.getCustomIdentifier());
         } finally {
             if (httpServer != null) {
                 httpServer.close();
