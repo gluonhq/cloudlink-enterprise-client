@@ -146,7 +146,8 @@ public class CloudLinkClient {
         Objects.requireNonNull(notification, "notification may not be null");
 
         Form form = new Form();
-        form.param("title", notification.getTitle())
+        form.param("customIdentifier", notification.getCustomIdentifier())
+                .param("title", notification.getTitle())
                 .param("body", notification.getBody())
                 .param("deliveryDate", "0")
                 .param("priority", notification.getPriority().name())
