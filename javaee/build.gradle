@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    compile 'javax.validation:validation-api:2.0.0.CR3'
+    compile 'javax.validation:validation-api:2.0.0.Final'
     compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
     compile 'javax.json.bind:javax.json.bind-api:1.0'
     compile 'org.glassfish:javax.json:1.1'
@@ -37,7 +37,7 @@ dependencies {
     testCompile 'io.vertx:vertx-core:3.4.1'
     testCompile 'org.glassfish.jersey.core:jersey-client:2.22.2'
     testRuntime 'org.eclipse:yasson:1.0'
-    testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.CR3'
+    testRuntime 'org.hibernate.validator:hibernate-validator:6.0.0.Final'
     testRuntime 'org.glassfish:javax.el:3.0.1-b08'
 }
 
