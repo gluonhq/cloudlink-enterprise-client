@@ -16,7 +16,7 @@ services from within an enterprise back end infrastructure that is running toget
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-enterprise-sdk-spring:1.2.0'
+        compile 'com.gluonhq:cloudlink-enterprise-sdk-spring:1.2.1'
     }
 
 #### Maven ####
@@ -25,7 +25,7 @@ services from within an enterprise back end infrastructure that is running toget
         <dependency>
             <groupId>com.gluonhq</groupId>
             <artifactId>cloudlink-enterprise-sdk-spring</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
 
