@@ -39,13 +39,16 @@ import io.vertx.core.http.HttpServerRequest;
 import org.junit.Test;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.StringReader;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -224,6 +227,56 @@ public class DataTest {
             String stored = client.addObject(identifier, sample);
             assertNotNull(stored);
             assertEquals(sample, stored);
+        } catch (CloudLinkClientException e) {
+            fail(e.getBody());
+        } finally {
+            if (httpServer != null) {
+                httpServer.close();
+            }
+        }
+    }
+
+    @Test
+    public void getList() {
+        String identifier = UUID.randomUUID().toString();
+
+        HttpServer httpServer = null;
+        try {
+            httpServer = startHttpServer(request -> {
+                if (request.method() == HttpMethod.GET) {
+                    int idx = request.absoluteURI().lastIndexOf("/");
+                    if (idx == -1) {
+                        request.response().setStatusCode(500).end("Invalid URI: " + request.absoluteURI());
+                    } else {
+                        String listIdentifier = request.absoluteURI().substring(idx + 1);
+                        if (listIdentifier.equals(identifier)) {
+                            JsonArrayBuilder builder = Json.createArrayBuilder();
+                            IntStream.of(1, 2, 3).forEach(i -> builder.add(Json.createObjectBuilder()
+                                    .add("payload", Json.createObjectBuilder().add("foo", "bar_" + i).add("zee", i).build().toString())
+                            ));
+                            String payload = builder.build().toString();
+                            request.response().setStatusCode(200)
+                                    .end(payload);
+                        } else {
+                            request.response().setStatusCode(500).end("Wrong object identifier, expected: <" + identifier + " but was <" + listIdentifier + ">");
+                        }
+                    }
+                } else {
+                    request.response().setStatusCode(500).end("Expected: <GET> but was <" + request.method() + ">");
+                }
+            });
+
+            CloudLinkClientConfig config = new CloudLinkClientConfig("http://localhost:45010", "");
+            config.setLogLevel(Level.FINE);
+            CloudLinkClient client = new CloudLinkClient(config);
+
+            List<Sample> samples = client.getList(identifier, Sample.class);
+            assertNotNull(samples);
+            assertEquals(3, samples.size());
+            IntStream.of(0, 1, 2).forEach(i -> {
+                assertEquals("bar_" + (i + 1), samples.get(i).getFoo());
+                assertEquals(i + 1, samples.get(i).getZee());
+            });
         } catch (CloudLinkClientException e) {
             fail(e.getBody());
         } finally {
