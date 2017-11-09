@@ -21,7 +21,7 @@ which is the reference implementation for JSON-B.
 #### Gradle ####
 
     dependencies {
-        compile 'com.gluonhq:cloudlink-enterprise-sdk-javaee:1.2.1'
+        compile 'com.gluonhq:cloudlink-enterprise-sdk-javaee:1.2.2'
 
         // only required if running with Java EE 7
         runtime 'org.eclipse:yasson:1.0'
@@ -33,7 +33,7 @@ which is the reference implementation for JSON-B.
         <dependency>
             <groupId>com.gluonhq</groupId>
             <artifactId>cloudlink-enterprise-sdk-javaee</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2</version>
         </dependency>
 
         <!-- only required if running with Java EE 7 -->
