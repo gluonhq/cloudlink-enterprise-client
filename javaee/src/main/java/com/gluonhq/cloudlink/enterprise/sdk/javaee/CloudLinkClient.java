@@ -357,7 +357,7 @@ public class CloudLinkClient {
         if (response.getStatus() == 200) {
             String json = response.readEntity(String.class);
             Jsonb jsonb = JsonbBuilder.create();
-            List<ObjectData> objects = jsonb.fromJson(json, new ArrayList<ObjectData>(){}.getClass());
+            List<ObjectData> objects = jsonb.fromJson(json, new ArrayList<ObjectData>(){}.getClass().getGenericSuperclass());
             return objects.stream().map(objectMapper).collect(Collectors.toList());
         } else {
             throw handleErrorResponse(response);
